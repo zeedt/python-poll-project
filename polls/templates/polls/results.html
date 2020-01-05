@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Poll App - Results</title>
+</head>
+<body>
+    <h1>{{ question.question_text }}</h1>
+
+    {% for choice in question.choice_set.all %}
+       <li>
+       {{ choice.choice_text }} ==> Vote: {{ choice.votes }}
+       </li>
+    {% endfor %}
+
+</body>
+</html>
