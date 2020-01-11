@@ -6,6 +6,7 @@ from django.template import loader
 from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.utils import timezone
+from .form import UploadForm, DocumentModelWithFileField, NameForm
 
 
 class IndexView(generic.ListView):
@@ -66,3 +67,50 @@ def vote(request, question_id):
         selected_choice.save()
 
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+
+def handle_uploaded_file(f):
+    with open('uploaded-documents/uploaded.png', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
+def upload(request):
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['document'])
+            return HttpResponseRedirect(reverse('polls:upload'))
+        return HttpResponse('this is not a valid file')
+    else:
+        return render(request, 'polls/file-upload.html')
+
+
+def uploadWithFormModel(request):
+    if request.method == 'POST':
+        form = DocumentModelWithFileField(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('polls:upload'))
+        return HttpResponse('this is not a valid file')
+    else:
+        return render(request, 'polls/file-upload.html')
+
+
+def get_name(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = NameForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = NameForm()
+
+    return render(request, 'polls/name.html', {'form': form})

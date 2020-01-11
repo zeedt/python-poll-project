@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_polls',
+        'NAME': 'django_polls2',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-        'PASSWORD': 'root',
+        'PASSWORD': 'Andela2.',
         'USER': 'postgres',
     }
 }

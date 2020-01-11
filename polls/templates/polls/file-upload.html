@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Poll App - file upload</title>
+</head>
+<body>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'polls:upload' %}">
+        {% csrf_token %}
+        <input type="text" value="" name="description" />
+        <input type="file" value="Select a file" name="document" />
+        <input type="submit" value="Submit"/>
+    </form>
+
+</body>
+</html>
