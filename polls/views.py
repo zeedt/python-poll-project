@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render
 
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -7,7 +8,10 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.utils import timezone
 from .form import UploadForm, DocumentModelWithFileField, NameForm
+from django.contrib.auth import authenticate, login, logout
+import logging
 
+logger = logging.getLogger(__name__)
 
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
@@ -114,3 +118,12 @@ def get_name(request):
         form = NameForm()
 
     return render(request, 'polls/name.html', {'form': form})
+
+
+# @login_required
+# @permission_required('polls.can_vote')
+def user_page(request):
+    logger.info("Loading request page now")
+    user = request.user
+    print("Authenticated user is ", user.is_authenticated)
+    return HttpResponse("Is user authenticated??? " + str(user.is_authenticated))

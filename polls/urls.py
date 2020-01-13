@@ -13,4 +13,5 @@ urlpatterns = [
     path('upload', views.uploadWithFormModel, name='upload'),
     # path('name', TemplateView.as_view(template_name="polls/name.html")),
     path('name', views.get_name, name='name'),
+    path('userpage', views.user_page, name='userpage'),
 ]

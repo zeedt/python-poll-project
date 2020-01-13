@@ -12,41 +12,36 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('contenttypes', '0001_initial'),
+        ('auth', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Permission',
+            name='Document',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='name')),
-                ('codename', models.CharField(max_length=100, verbose_name='codename')),
-                ('content_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType', verbose_name='content type')),
+                ('description', models.CharField(blank=True, max_length=225)),
+                ('document', models.FileField(upload_to='uploaded-documents/')),
             ],
             options={
-                'verbose_name': 'permission',
-                'verbose_name_plural': 'permissions',
-                'ordering': ('content_type__app_label', 'content_type__model', 'codename'),
-                'unique_together': {('content_type', 'codename')},
+                'permissions': [('can_view_documentss', 'Can clean documentss')],
             },
-            managers=[
-                ('objects', django.contrib.auth.models.PermissionManager()),
+        ),
+        migrations.CreateModel(
+            name='Question',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('question_text', models.CharField(max_length=200)),
+                ('pub_date', models.DateTimeField(verbose_name='date published')),
             ],
         ),
         migrations.CreateModel(
-            name='Group',
+            name='Choice',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=150, unique=True, verbose_name='name')),
-                ('permissions', models.ManyToManyField(blank=True, to='auth.Permission', verbose_name='permissions')),
-            ],
-            options={
-                'verbose_name': 'group',
-                'verbose_name_plural': 'groups',
-            },
-            managers=[
-                ('objects', django.contrib.auth.models.GroupManager()),
+                ('choice_text', models.CharField(max_length=200)),
+                ('votes', models.IntegerField(default=0)),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.Question')),
             ],
         ),
         migrations.CreateModel(
@@ -70,7 +65,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'user',
                 'verbose_name_plural': 'users',
                 'abstract': False,
-                'swappable': 'AUTH_USER_MODEL',
             },
             managers=[
                 ('objects', django.contrib.auth.models.UserManager()),

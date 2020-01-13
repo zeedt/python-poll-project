@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 import datetime
@@ -28,3 +29,11 @@ class Choice(models.Model):
 class Document(models.Model):
     description = models.CharField(blank=True, max_length=225)
     document = models.FileField(upload_to='uploaded-documents/')
+
+    class Meta:
+        permissions = [('can_view_documentss', 'Can clean documentss')]
+
+
+class User(AbstractUser):
+    pass
+
