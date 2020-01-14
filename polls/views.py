@@ -123,7 +123,7 @@ def get_name(request):
 # @login_required
 # @permission_required('polls.can_vote')
 def user_page(request):
-    logger.info("Loading request page now")
+    logger.debug("Loading request page now")
     user = request.user
     print("Authenticated user is ", user.is_authenticated)
     return HttpResponse("Is user authenticated??? " + str(user.is_authenticated))
