@@ -1,8 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import models, serializers
-from rest_framework import status, generics
+from rest_framework import status, generics, viewsets
+from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from  rest_framework import mixins
 
 
 # class ListCreateView(APIView):
@@ -45,3 +47,23 @@ class RetrieveUpdateDestroyReview(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return get_object_or_404(self.get_queryset(), course_id=self.kwargs.get('course_pk'), pk=self.kwargs('pk'))
+
+
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = models.Course.objects.all()
+    serializer_class = serializers.CourseSerializer
+
+    @action(detail=True, methods=['get'])
+    def reviews(self, request, pk=None):
+        course = self.get_object()
+        serializer = serializers.ReviewSerializer(course.reviews.all(), many=True)
+        return Response(serializer.data)
+
+
+class ReviewViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = models.Review.objects.all()
+    serializer_class = serializers.ReviewSerializer
+
+# class ReviewViewSet(viewsets.ModelViewSet):
+#     queryset = models.Review.objects.all()
+#     serializer_class = serializers.ReviewSerializer
