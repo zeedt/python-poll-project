@@ -4,7 +4,7 @@ from . import models, serializers
 from rest_framework import status, generics, viewsets
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
-from  rest_framework import mixins
+from rest_framework import mixins, permissions
 
 
 # class ListCreateView(APIView):
@@ -50,6 +50,7 @@ class RetrieveUpdateDestroyReview(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CourseViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.DjangoModelPermissions,)
     queryset = models.Course.objects.all()
     serializer_class = serializers.CourseSerializer
 
@@ -60,7 +61,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class ReviewViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class ReviewViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
 
